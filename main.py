@@ -1,17 +1,18 @@
+import glob
+import os
 from pydub import AudioSegment
 
 
-sound = AudioSegment.from_mp3("C:\Users\emmet\Desktop\make.mp3")
-
-# len() and slicing are in milliseconds
-halfway_point = len(sound) / 2
-
-ten_seconds = 10 * 1000
-
-second_half = sound[halfway_point:]
-
-audio_clip = second_half[:ten_seconds]
-
-
-# writing mp3 files is a one liner
-audio_clip.export("C:\Users\emmet\Desktop\Export\make.mp3", format="mp3")
+os.chdir("C:/Users/emmet/Desktop/TestTracks")
+for file in glob.glob("*.mp3"):
+    sound = AudioSegment.from_mp3(file)
+    halfway_point = len(sound) / 2
+    ten_seconds = 5 * 1000
+    second_half = sound[halfway_point:]
+    audio_clip = second_half[:ten_seconds]
+    audio_clip = audio_clip.fade_in(500).fade_out(500)
+    folderDestination = "C:/Users/emmet/Desktop/TestOutput/"
+    filename = os.path.basename(file)
+    filename = filename.replace(" ", "")
+    final = folderDestination + filename
+    audio_clip.export(final, format="mp3")
